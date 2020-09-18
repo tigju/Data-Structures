@@ -37,8 +37,8 @@ from singly_linked_list import LinkedList, Node
 
 class Stack(LinkedList, Node):
         def __init__(self):
-            self.head = None
-            self.tail = None
+            super().__init__()
+            self.size = 0
 
         def __str__(self):
             temp = self.head
@@ -49,20 +49,19 @@ class Stack(LinkedList, Node):
             return f"{[v.get_value() for v in stk]}"
 
         def __len__(self):
-            temp = self.head
-            count = 0
-            while temp:
-                count += 1
-                temp = temp.get_next()
-            return count
+            return self.size
 
         def push(self, value):
             # use inherited add_to_tail() of a LinkedList class
-            return super().add_to_tail(value)
+            self.add_to_tail(value)
+            self.size += 1
 
         def pop(self):
+            if self.size == 0:
+                return None
+            self.size -= 1
             # use inherited remove_tail() from LinkedList class
-            return super().remove_tail()
+            return self.remove_tail()
         
         def peek(self):
             return f"{self.tail.get_value()}"
