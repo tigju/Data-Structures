@@ -42,24 +42,23 @@ from singly_linked_list import LinkedList
 class Queue(LinkedList):
     
     def __init__(self):
-        self.head = None
-        self.tail = None
+        super().__init__()
+        self.size = 0
 
     def __len__(self):
-        temp = self.head
-        count = 0
-        while temp:
-            count += 1
-            temp = temp.get_next()
-        return count
+        return self.size
 
     def enqueue(self, value):
         # use inherited add_to_tail() of a LinkedList class
-        return super().add_to_tail(value)
+        self.add_to_tail(value)
+        self.size += 1
         
     def dequeue(self):
+        if self.size == 0:
+            return None
+        self.size -= 1
         # use inherited remove_head() of a LinkedList class
-        return super().remove_head()
+        return self.remove_head()
 
 
 
