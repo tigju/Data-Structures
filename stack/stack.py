@@ -32,21 +32,21 @@ return elements in Last In First Out order.
 #             return None
 
 ## 2. Re-implement using LinkedList class
-from singly_linked_list import LinkedList, Node
+from singly_linked_list import LinkedList
 
 
-class Stack(LinkedList, Node):
+class Stack(LinkedList):
         def __init__(self):
             super().__init__()
             self.size = 0
 
-        def __str__(self):
-            temp = self.head
-            stk = []
-            while temp:
-                stk.append(temp)
-                temp = temp.get_next()
-            return f"{[v.get_value() for v in stk]}"
+        # def __str__(self):
+        #     temp = self.head
+        #     stk = []
+        #     while temp:
+        #         stk.append(temp)
+        #         temp = temp.get_next()
+        #     return f"{[v.get_value() for v in stk]}"
 
         def __len__(self):
             return self.size
@@ -67,10 +67,10 @@ class Stack(LinkedList, Node):
             return f"{self.tail.get_value()}"
 
 
-stack1 = Stack()
-stack1.push(10)
-stack1.push(15)
-print(stack1.head)
-print(len(stack1))
-print(stack1.peek())
-print(stack1)
+# stack1 = Stack()
+# stack1.push(10)
+# stack1.push(15)
+# print(stack1.head)
+# print(len(stack1))
+# print(stack1.peek())
+# print(stack1)
