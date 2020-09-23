@@ -194,9 +194,6 @@ class DoublyLinkedList:
         self.length -= 1
             
 
-
-
-
     """
     Finds and returns the maximum value of all the nodes 
     in the List.
