@@ -7,6 +7,13 @@ class ListNode:
         self.prev = prev
         self.value = value
         self.next = next
+
+    def delete(self):
+        if self.prev:
+            self.prev.next = self.next
+        if self.next:
+            self.next.prev = self.prev
+
             
 """
 Our doubly-linked list class. It holds references to 
@@ -62,39 +69,9 @@ class DoublyLinkedList:
     Returns the value of the removed Node.
     """
     def remove_from_head(self):
-        # if there is no head, then list is emply (nothing to remove)
-        if self.head is None:
-            # return None
-            return None
-        # if there is a head but there in no next node
-        if self.head and self.head.next is None:
-            # store the current head value of the node that we are going to remove
-            current = self.head.value
-            # remove the node
-            # set head and the tail to None
-            self.head = None
-            self.tail = None
-            # update length of the list
-            self.length -= 1
-            # return the stored value
-            return current
-        # otherwise (when head is present and next is present)
-        else:
-            # get the value of the current head
-            current = self.head.value
-            # set next node as a new head
-            self.head = self.head.next
-            # set head's previous as None
-            self.head.prev = None 
-            # update tail
-            curr = self.head
-            while curr.next:
-                curr = curr.next
-            self.tail = curr
-            # update length
-            self.length -= 1
-            # return the removed node's value 
-            return current
+        current = self.head.value
+        self.delete(self.head)
+        return current
             
     """
     Wraps the given value in a ListNode and inserts it 
@@ -109,8 +86,6 @@ class DoublyLinkedList:
             # assign new node to head and tail
             self.head = new_node
             self.tail = new_node
-            # update length
-            self.length += 1
         # otherwise
         else:
             # set the new_node as the current tail's next
@@ -120,7 +95,7 @@ class DoublyLinkedList:
             # set the new node as a new tail
             self.tail = new_node
             # update length
-            self.length += 1
+        self.length += 1
             
     """
     Removes the List's current tail node, making the 
@@ -128,30 +103,8 @@ class DoublyLinkedList:
     Returns the value of the removed Node.
     """
     def remove_from_tail(self):
-        # if there is no tail and no head
-        if self.tail is None and self.head is None:
-            # return None
-            return None
-        # if there is only one node in a list 
-        if self.tail and self.tail.prev is None:
-            # store the current tail's value
-            current = self.tail.value
-            # set head and tail to None
-            self.head = None
-            self.tail = None
-            # update length
-            self.length -= 1
-        # otherwise (if there is previous node of the tail)
-        else:
-            # store current tail's value
-            current = self.tail.value
-            # set current tail's previous node as a new tail  
-            self.tail = self.tail.prev
-            # set new tail's next value as None
-            self.tail.next = None
-            # update length
-            self.length -= 1
-        # return removed tail's value
+        current = self.tail.value
+        self.delete(self.tail)
         return current    
     """
     Removes the input node from its current spot in the 
@@ -172,6 +125,18 @@ class DoublyLinkedList:
         self.head = node
         # set head prev to None
         self.head.prev = None
+
+        #DRY
+        # if node is self.head:
+        #     return
+        # value = node.value
+        # if node is self.tail:
+        #     self.remove_from_tail()
+        # else:
+        #     node.delete()
+
+        #     self.length -= 1
+        # self.add_to_head(value)
         
     """
     Removes the input node from its current spot in the 
@@ -193,6 +158,18 @@ class DoublyLinkedList:
         # set head prev to None
         self.tail.next = None
 
+        #DRY code 
+        # if node is self.tail:
+        #     return
+        # value = node.value
+        # if node is self.head:
+        #     self.remove_from_head()
+        # else:
+        #     node.delete()
+
+        #     self.length -= 1
+        # self.add_to_tail(value)
+
     """
     Deletes the input node from the List, preserving the 
     order of the other elements of the List.
@@ -202,71 +179,20 @@ class DoublyLinkedList:
         if self.head is None:
             # return None
             return None
-        # Case 1: if node is a head
-        if self.head == node:
-            # and if head next is None
-            if self.head.next is None:
-                # set everything to None (remove from list)
-                self.head = None
-                self.tail = None
-                node = None
-                # update length
-                self.length -= 1
-                return
-            # otherwise (if head next is not None)
-            else:
-                # store next of the head
-                nxt = self.head.next
-                # set prev of the next to None
-                nxt.prev = None
-                # set next as a new head
-                self.head = nxt
-                # updte length
-                self.length -= 1
-                return
-        # case 2: if node's next is not None
-        elif node.next is not None:
-            # and if node's next is not tail
-            if node.next is not self.tail:
-                # store node's next
-                nxt = node.next
-                # store node's prev
-                prev = node.prev
-                # set next's prev to node's prev
-                nxt.prev = prev
-                # set prev's next to node's next
-                prev.next = nxt
-                # set node's next to none
-                node.next = None
-                # set node's prev to none
-                node.prev = None
-                # get rid of the node
-                node = None
-                # update the length
-                self.length -= 1
-                return
-            #otherwise (if the next of the node is tail)
-            else:
-                # store node's next
-                nxt = node.next
-                # store node's prev
-                prev = node.prev
-                # set next's prev to node's prev
-                nxt.prev = prev
-                # set prev's next to node's next
-                prev.next = nxt
-                self.tail = nxt
-                node.next = None
-                node.prev = None
-                node = None
-                self.length -= 1
-        elif node == self.tail:
+        if self.head is self.tail:
+            self.head = None
+            self.tail = None
+        elif self.head is node:
+            self.head = node.next
+            node.delete()
+        elif self.tail is node:
             self.tail = node.prev
             self.tail.next = None
-            node.prev = None
-            node = None
-            self.length -= 1
-            return
+            node.delete()
+        else:
+            node.delete()
+        self.length -= 1
+            
 
 
 
