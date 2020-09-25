@@ -9,6 +9,9 @@ This part of the project comprises two days:
 2. Implement the `in_order_print`, `bft_print`, and `dft_print` methods
    on the BSTNode class.
 """
+# imports for BFT and DFT print
+from queue import Queue
+from stack import Stack
 
 class BSTNode:
     def __init__(self, value):
@@ -122,7 +125,7 @@ class BSTNode:
         return self.left.get_min()
         # -----------------------------------------------
 
-    # Call the function `fn` on the value of each node
+    # Call the function `fn` on the value of each node (DFT full)
     def for_each(self, fn):
         # call the function passing in the current nodes value
         fn(self.value)
@@ -140,36 +143,106 @@ class BSTNode:
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
     def in_order_print(self):
-        # call the function passing in the current nodes value
-
+        # base case
+        # if there are no more nodes
+        if not self.value:
+            # return
+            return
         # if there is a node to the left
-        # call the function on the left value
-
+        if self.left:
+            # call in order print on the left
+            self.left.in_order_print()
+        # print the value of the current node (self.value)
+        print(self.value)
         # if there is a node to the right
-        # call the function on the right node
-        pass
+        if self.right:
+            # call in order print on the right
+            self.right.in_order_print()
+        
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
-    def bft_print(self):
-        pass
+
+    def bft_print(self):  # use a queue
+        # create a queue
+        queue = Queue()
+        # enqueue the first node (self)
+        queue.enqueue(self)
+        # while there is data on the queue
+        while queue:
+            # dequeu from queue on to current_node
+            current = queue.dequeue()
+            # print the current_node's value
+            print(current.value)
+            # if the current_node has a left child
+            if current.left:
+                # enqueue the left child
+                queue.enqueue(current.left)
+            # if the current_node has a right child
+            if current.right:
+                # enqueue the right child
+                queue.enqueue(current.right)
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
-    def dft_print(self):
-        pass
+    def dft_print(self): # use a stack
+        # create a stack
+        stack = Stack()
+        # push the first node (self)
+        stack.push(self)
+        # while there is data on the stack
+        while stack: # (we can start from left or right) 
+            # pop from stack on to current_node
+            current = stack.pop()
+            # print the current_node's value
+            print(current.value)
+            # if the current_node has a left child
+            if current.right: # if current.left:
+                # push the left child
+                stack.push(current.right) # stack.push(current.left)
+            # if the current_node has a right child
+            if current.left: # if current.right:
+                # push the right child
+                stack.push(current.left) # stack.push(current.right)
 
     # Stretch Goals -------------------------
     # Note: Research may be required
 
     # Print Pre-order recursive DFT
     def pre_order_dft(self):
-        pass
+        # base case
+        # if there are no more nodes
+        if not self.value:
+            # return
+            return
+        # print the value of the current node (self.value) pre-order
+        print(self.value)
+        # if there is a node to the left
+        if self.left:
+            # call in order print on the left
+            self.left.pre_order_dft()
+        # if there is a node to the right
+        if self.right:
+            # call in order print on the right
+            self.right.pre_order_dft()
 
     # Print Post-order recursive DFT
     def post_order_dft(self):
-        pass
-
+        # base case
+        # if there are no more nodes
+        if not self.value:
+            # return
+            return
+        # if there is a node to the left
+        if self.left:
+            # call in order print on the left
+            self.left.post_order_dft()
+        # if there is a node to the right
+        if self.right:
+            # call in order print on the right
+            self.right.post_order_dft()
+        # print the value of the current node (self.value) post order
+        print(self.value)
 """
 This code is necessary for testing the `print` methods
 """
@@ -183,10 +256,10 @@ bst.insert(3)
 bst.insert(4)
 bst.insert(2)
 bst.insert(4)
-print(bst.contains(7))
-# bst.bft_print()
-# bst.dft_print()
-print(bst.get_min())
+# print(bst.contains(7))
+print(bst.bft_print())
+print(bst.dft_print())
+# print(bst.get_min())
 # print("elegant methods")
 # print("pre order")
 # bst.pre_order_dft()
