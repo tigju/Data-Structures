@@ -46,9 +46,6 @@ class BSTNode:
     # Return True if the tree contains the value
     # False if it does not
     def contains(self, target):
-        print(self.value)
-        print(target)
-        print(self.value == target)
         # if the value of the current node matches the target
         if self.value == target:
             # return True
